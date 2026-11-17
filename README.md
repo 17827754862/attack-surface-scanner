@@ -416,3 +416,11 @@ tests/                   门禁、模型和解析器测试
   `SECURITY_BOUNDARIES.md`。
 - 本机没有可用 DeepSeek Key，因此已完成 API 配置、加密、错误降级和 mock 调用测试，
   但没有声称完成真实 DeepSeek 生成质量验收。
+
+## 许可证
+
+本项目采用 [MIT 许可证](LICENSE)。第三方组件与工具的许可证见
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
+
+使用本工具前请确认你对目标拥有明确授权。许可证授予的是代码的使用权，
+不构成对任何目标进行扫描的授权。
