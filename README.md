@@ -32,10 +32,7 @@ AUTHORIZATION_FILE=auth.local.yaml
 ## 比赛提交材料
 
 - 技术报告（29 页）：[PDF](docs/competition/攻击面侦察与漏洞定位系统-技术报告.pdf) / [Word](docs/competition/攻击面侦察与漏洞定位系统-技术报告.docx)
-- 5-8 分钟演示视频讲解稿与分镜：[DEMO_VIDEO_SCRIPT.md](docs/competition/DEMO_VIDEO_SCRIPT.md)
-- 大赛提交核对表：[COMPETITION_SUBMISSION_CHECKLIST.md](docs/competition/COMPETITION_SUBMISSION_CHECKLIST.md)
 - 离线运行资源说明：[OFFLINE_RUNTIME_GUIDE.md](docs/competition/OFFLINE_RUNTIME_GUIDE.md)
-- 给同学的 GitHub 上传步骤：[给同学的上传说明.md](给同学的上传说明.md)
 - 完整项目说明书：[docs/project-manual](docs/project-manual)
 
 ## 团队信息
