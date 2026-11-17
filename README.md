@@ -42,7 +42,6 @@ AUTHORIZATION_FILE=auth.local.yaml
 | 团队名称 | 我才是奶龙 |
 | 评审专用账号 | 账号：admin； 密码：admin|
 
-提交前请将“待填写”替换为真实信息，并确认公开仓库中不包含 `.env`、API Key、账号密码或授权单位敏感信息。
 
 ## 技术架构
 
