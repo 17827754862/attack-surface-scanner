@@ -1,0 +1,77 @@
+services:
+  worker:
+    networks:
+      - default
+      - scanner-targets
+    environment:
+      OPENVAS_ENABLED: "true"
+      OPENVAS_HOST: openvas
+      OPENVAS_PORT: "9390"
+      OPENVAS_CAFILE: /gvm-secure/var-lib/gvm/CA/cacert.pem
+    volumes:
+      - openvas_data:/gvm-secure:ro
+    depends_on:
+      openvas:
+        condition: service_healthy
+  backend:
+    networks:
+      - default
+      - scanner-targets
+    environment:
+      OPENVAS_ENABLED: "true"
+      OPENVAS_HOST: openvas
+      OPENVAS_PORT: "9390"
+
+  zap:
+    networks:
+      - default
+      - scanner-targets
+
+  openvas:
+    image: ${OPENVAS_IMAGE:-immauss/openvas:26.07.27.01}
+    profiles: ["full"]
+    hostname: openvas
+    networks:
+      - default
+      - scanner-targets
+    entrypoint: ["/bin/bash", "/usr/local/bin/openvas-entry.sh"]
+    environment:
+      USERNAME: ${OPENVAS_USERNAME:-admin}
+      PASSWORD: ${OPENVAS_PASSWORD:-admin}
+      RELAYHOST: 127.0.0.1
+      SMTPPORT: "25"
+      REDISDBS: "512"
+      QUIET: "true"
+      NEWDB: "false"
+      SKIPSYNC: ${OPENVAS_SKIP_SYNC:-false}
+      RESTORE: "false"
+      DEBUG: "false"
+      HTTPS: "false"
+      GMP: "9390"
+      PGVER: "15"
+    volumes:
+      - openvas_data:/data
+      - ./scripts/openvas-entry.sh:/usr/local/bin/openvas-entry.sh:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          su -s /bin/sh -c 'gvm-cli --gmp-username "$${USERNAME}"
+          --gmp-password "$${PASSWORD}" --timeout 5 tls
+          --hostname 127.0.0.1 --port 9390
+          --cafile /var/lib/gvm/CA/cacert.pem --xml "<get_version/>"
+          >/dev/null 2>&1' gvm
+      interval: 10s
+      timeout: 15s
+      retries: 30
+      start_period: 180s
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  openvas_data:
+
+networks:
+  scanner-targets:
+    external: true

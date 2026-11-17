@@ -1,0 +1,103 @@
+{
+  "default_credentials": [
+    "default login",
+    "default credentials",
+    "weak authentication method",
+    "weak credentials"
+  ],
+  "sensitive_file_exposure": [
+    "phpinfo page - detect",
+    "sensitive file",
+    "backup file",
+    "source code disclosure",
+    "directory browsing"
+  ],
+  "missing_security_headers": [
+    "content security policy (csp) header not set",
+    "content security policy configuration",
+    "x-content-type-options header missing",
+    "mime type confusion",
+    "missing anti-clickjacking header",
+    "clickjacking protection",
+    "csp header not set"
+  ],
+  "cleartext_login": [
+    "cleartext submission of password",
+    "unencrypted channels",
+    "http only site"
+  ],
+  "cookie_security": [
+    "cookie no httponly flag",
+    "httponly flag cookie",
+    "secure flag cookie",
+    "cookie without samesite attribute"
+  ],
+  "information_disclosure": [
+    "server leaks version information via \"server\" http response header field",
+    "in page banner information leak",
+    "application error disclosure",
+    "information disclosure - debug error messages"
+  ],
+  "sql_injection": [
+    "sql injection",
+    "sqli",
+    "blind sql injection"
+  ],
+  "cross_site_scripting": [
+    "cross site scripting",
+    "xss",
+    "reflected xss",
+    "stored xss"
+  ],
+  "file_inclusion": [
+    "file inclusion",
+    "local file inclusion",
+    "remote file inclusion",
+    "path traversal",
+    "file handling"
+  ],
+  "file_upload": [
+    "file upload",
+    "unrestricted file upload",
+    "arbitrary file upload"
+  ],
+  "csrf": [
+    "absence of anti-csrf tokens",
+    "csrf",
+    "cross-site request forgery",
+    "cross site request forgery"
+  ],
+  "command_injection": [
+    "command execution",
+    "command injection",
+    "os command injection"
+  ],
+  "ssrf": [
+    "server side request forgery",
+    "ssrf"
+  ],
+  "xxe": [
+    "xml external entity",
+    "xxe"
+  ],
+  "session_fixation": [
+    "session fixation",
+    "fixed session"
+  ],
+  "brute_force": [
+    "brute force",
+    "login rate limiting",
+    "authentication brute force"
+  ],
+  "known_cve": [
+    "cve-"
+  ],
+  "kubernetes_misconfiguration": [
+    "k8s_control:",
+    "kubernetes"
+  ],
+  "subdomain_takeover": [
+    "subdomain takeover",
+    "takeover"
+  ]
+}

@@ -1,0 +1,14 @@
+.env
+samples/auth.local.yaml
+data/
+reports/
+output/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.vite/
+node_modules/
+dist/
+*.log
+docs/competition/qa/
+docs/project-manual/render-qa*/

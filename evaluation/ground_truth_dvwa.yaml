@@ -1,0 +1,31 @@
+target: http://dvwa
+profile: DVWA Low
+categories:
+  - brute_force
+  - command_injection
+  - csrf
+  - file_inclusion
+  - file_upload
+  - sql_injection
+  - reflected_xss
+  - stored_xss
+  - weak_session_id
+  - dom_xss
+  - default_credentials
+  - sensitive_file_exposure
+  - missing_security_headers
+  - cleartext_login
+aliases:
+  brute_force:
+    - brute force
+  command_injection:
+    - command execution
+    - os command injection
+  reflected_xss:
+    - cross_site_scripting
+  stored_xss:
+    - cross_site_scripting
+  dom_xss:
+    - cross_site_scripting
+  weak_session_id:
+    - session id

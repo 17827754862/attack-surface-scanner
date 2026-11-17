@@ -1,0 +1,44 @@
+auth_refs:
+  local-dvwa:
+    authentication:
+      type: form
+      label: 本地 DVWA
+      target_hint: http://dvwa
+      target_hosts: [dvwa]
+      login_url: http://dvwa/login.php
+      verification_url: http://dvwa/index.php
+      username_env: DVWA_USERNAME
+      password_env: DVWA_PASSWORD
+      username_field: username
+      password_field: password
+      csrf_field: user_token
+      submit_field: Login
+      submit_value: Login
+      logged_in_indicator: Logout
+      logged_out_indicator: Login
+      safe_path_denylist:
+        - logout.php
+        - setup.php
+      active_scan_exclude:
+        - vulnerabilities/csrf/
+      rate_limit_probe: true
+    allowed_cidrs:
+      - 127.0.0.0/8
+      - 172.16.0.0/12
+    scope:
+      - dvwa
+      - 127.0.0.1
+      - localhost
+  local-mock:
+    authentication:
+      type: none
+      label: 本地 Mock
+      target_hint: http://mock:8000
+      target_hosts: [mock]
+    allowed_cidrs:
+      - 127.0.0.0/8
+      - 172.16.0.0/12
+    scope:
+      - mock
+      - 127.0.0.1
+      - localhost

@@ -1,0 +1,2 @@
+group,run,findings,recall,precision,false_positive_rate,coverage,task_id,status
+full_agent,1,88,0.5000,0.5882,0.4118,0.5000,1e269b9b-b426-4139-ae73-e0b001480fad,completed

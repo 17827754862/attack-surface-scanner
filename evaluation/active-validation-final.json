@@ -1,0 +1,22 @@
+{
+  "task_id": "a1ac45e1-d0f4-489b-ad99-854429ef3e83",
+  "status": "completed",
+  "profile": "validation_only",
+  "validation_level": "deep",
+  "findings": 6,
+  "types": [
+    "sql_injection",
+    "command_injection",
+    "file_upload",
+    "default_credentials",
+    "session_fixation",
+    "open_port"
+  ],
+  "partial_budget_task": "d4fdbb0d-04a5-4df6-944c-dfa5e1a984df",
+  "partial_budget_status": "partial",
+  "oast_callback_verified": true,
+  "acceptance_status": "passed",
+  "acceptance_dvwa_task": "509f8d6b-3c88-4b34-a044-9d86357c2e41",
+  "acceptance_validation_task": "82d15b48-1889-4c15-b11b-ce8ac6595dec",
+  "acceptance_cancel_resume_task": "b22b65bf-c7d5-4216-a5b4-d847218e3aac"
+}

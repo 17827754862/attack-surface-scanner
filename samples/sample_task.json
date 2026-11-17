@@ -1,0 +1,11 @@
+{
+  "target": "http://dvwa",
+  "auth_ref": "local-dvwa",
+  "authorization_confirmed": true,
+  "max_rps": 5,
+  "mode": "active",
+  "time_profile": "standard",
+  "time_budget_seconds": 1800,
+  "validation_level": "safe",
+  "oast_enabled": false
+}

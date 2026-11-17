@@ -1,0 +1,10 @@
+group,run,findings,recall,precision,false_positive_rate,elapsed_seconds,coverage,task_id,status
+nuclei,1,0,0.0,0.0,0.0,35.3,0.0,b6aeb958-3658-4073-8d33-f9967eb3078a,completed
+nuclei,2,0,0.0,0.0,0.0,35.3,0.0,2757f36f-a359-47ac-89bd-36e7df1e408a,completed
+nuclei,3,0,0.0,0.0,0.0,35.31,0.0,075b8558-6898-4668-93ac-6db400945fb2,completed
+zap_wapiti_nuclei,1,103,0.4167,0.5269,0.4731,649.03,0.4167,79bdbcf3-dcaa-45b3-b36e-ea7488f22666,completed
+zap_wapiti_nuclei,2,103,0.4167,0.5269,0.4731,649.45,0.4167,3b6c8937-5e69-4b58-b086-e84e0804d04a,completed
+zap_wapiti_nuclei,3,103,0.4167,0.5269,0.4731,644.22,0.4167,3023545e-23d9-4744-94f9-4b1047ecfdb6,completed
+full_agent,1,104,0.4167,0.5269,0.4731,644.31,0.4167,85f58e29-77e9-40a0-9069-c51f8de808de,completed
+full_agent,2,104,0.4167,0.5269,0.4731,649.25,0.4167,a9f6b1d2-2998-4e5b-a6c2-d60c3af00054,completed
+full_agent,3,104,0.4167,0.5269,0.4731,649.3,0.4167,0ef3e324-a168-4a6c-a947-7a9bdace98df,completed

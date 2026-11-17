@@ -1,0 +1,11 @@
+{
+  "target": "http://mock:8000",
+  "auth_ref": "local-mock",
+  "authorization_confirmed": true,
+  "max_rps": 5,
+  "mode": "active",
+  "time_profile": "quick",
+  "time_budget_seconds": 180,
+  "validation_level": "safe",
+  "oast_enabled": false
+}

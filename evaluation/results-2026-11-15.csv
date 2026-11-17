@@ -1,0 +1,10 @@
+group,run,findings,security_findings,matched_findings,risk_groups,category_hits,recall,precision,fp_rate,coverage,elapsed_seconds,task_id,status,hit_categories
+nuclei,1,0,0,0,0,0,0.0,,,0.0,15.37,cd7a39da-b0bf-4ac8-99ba-6f51a4a2885d,completed,
+nuclei,2,0,0,0,0,0,0.0,,,0.0,15.28,8687b465-f401-4de4-9076-a039ec4c6ce5,completed,
+nuclei,3,0,0,0,0,0,0.0,,,0.0,10.25,cc8366aa-bf19-4eb7-9ca9-7085784fba3f,completed,
+zap_wapiti_nuclei,1,86,84,48,19,6,0.5,0.5714,0.4286,0.5,681.13,d7bf56a6-a9d5-492c-8e07-4830e61aab30,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"
+zap_wapiti_nuclei,2,86,84,48,19,6,0.5,0.5714,0.4286,0.5,665.99,70784bd8-ebaf-4806-9002-035b564f8ad2,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"
+zap_wapiti_nuclei,3,85,83,47,19,6,0.5,0.5663,0.4337,0.5,661.13,340f2476-df16-4eba-9a4c-55db4a3e4d63,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"
+full_agent,1,205,176,81,24,6,0.5,0.4602,0.5398,0.5,2993,2f974099-34c0-4d62-ad13-512c2369cf3b,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"
+full_agent,2,211,182,85,25,6,0.5,0.467,0.533,0.5,3040.01,fe510ca5-d21f-4f47-92c0-5e9d87e6dbf2,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"
+full_agent,3,205,176,83,25,6,0.5,0.4716,0.5284,0.5,3030.53,5030a112-0910-417d-8d9a-8f3f14fdafaf,completed,"cleartext_login,cross_site_scripting,csrf,file_inclusion,missing_security_headers,sensitive_file_exposure"

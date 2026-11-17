@@ -1,0 +1,289 @@
+name: attack-surface-scanner
+
+services:
+  postgres:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_DB: scanner
+      POSTGRES_USER: scanner
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scanner -d scanner"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4.1-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  zap:
+    image: ${ZAP_IMAGE:-ghcr.io/zaproxy/zaproxy:2.17.0}
+    hostname: zap
+    environment:
+      ZAP_API_KEY: ${ZAP_API_KEY:-local-zap-key}
+    command:
+      - zap.sh
+      - -daemon
+      - -host
+      - 0.0.0.0
+      - -port
+      - "8090"
+      - -config
+      - api.key=${ZAP_API_KEY:-local-zap-key}
+      - -config
+      - autoupdate.start.checkForUpdates=false
+      - -config
+      - autoupdate.start.checkAddonUpdates=false
+      - -config
+      - autoupdate.start.installAddonUpdates=false
+      - -config
+      - api.addrs.addr.name=.*
+      - -config
+      - api.addrs.addr.regex=true
+    volumes:
+      - zap_data:/zap/wrk
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "curl --silent --output /dev/null --fail \"http://localhost:8090/JSON/core/view/version/?apikey=$${ZAP_API_KEY}\" || exit 1"
+      interval: 15s
+      timeout: 5s
+      start_period: 45s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  oast:
+    build:
+      context: ./oast
+      dockerfile: Dockerfile
+    environment:
+      OAST_SECRET: ${OAST_SECRET:-local-oast-secret}
+      OAST_PUBLIC_BASE_URL: ${OAST_PUBLIC_BASE_URL:-http://oast:8001}
+      OAST_DATABASE: /data/oast.db
+    ports:
+      - "127.0.0.1:${OAST_PORT:-18001}:8001"
+    volumes:
+      - oast_data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2)"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://scanner:${POSTGRES_PASSWORD:-changeme}@postgres:5432/scanner
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
+      AUTHORIZATION_FILE: /app/samples/${AUTHORIZATION_FILE:-auth.example.yaml}
+      DEFAULT_SCOPE: ${AUTHORIZED_SCOPE:-dvwa,127.0.0.1,localhost}
+      ZAP_URL: http://zap:8090
+      ZAP_HOST: ${ZAP_HOST:-zap}
+      ZAP_PORT: ${ZAP_PORT:-8090}
+      ZAP_API_KEY: ${ZAP_API_KEY:-local-zap-key}
+      OUTPUT_DIR: /output
+      CAPABILITIES_PATH: /output/capabilities.json
+      VULN_ALIAS_FILE: /app/config/vuln_alias.json
+      PLAYBOOK_DIR: /app/report/playbooks
+      EVIDENCE_RETENTION_DAYS: ${EVIDENCE_RETENTION_DAYS:-30}
+      WEAK_CREDENTIALS_FILE: /app/config/weak_credentials.txt
+      JUICE_EMAIL: ${JUICE_EMAIL:-}
+      JUICE_PASSWORD: ${JUICE_PASSWORD:-}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./samples:/app/samples:ro
+      - ./config:/app/config:ro
+      - ./report:/app/report:ro
+      - ./scripts:/app/scripts:ro
+      - output_data:/output
+    read_only: true
+    tmpfs:
+      - /tmp
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 5s
+      timeout: 4s
+      retries: 30
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: worker/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://scanner:${POSTGRES_PASSWORD:-changeme}@postgres:5432/scanner
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      AUTHORIZATION_FILE: /app/samples/${AUTHORIZATION_FILE:-auth.example.yaml}
+      DEFAULT_SCOPE: ${AUTHORIZED_SCOPE:-dvwa,127.0.0.1,localhost}
+      OUTPUT_DIR: /output
+      CAPABILITIES_PATH: /output/capabilities.json
+      ZAP_URL: http://zap:8090
+      ZAP_HOST: ${ZAP_HOST:-zap}
+      ZAP_PORT: ${ZAP_PORT:-8090}
+      ZAP_API_KEY: ${ZAP_API_KEY:-local-zap-key}
+      DVWA_USERNAME: ${DVWA_USERNAME:-admin}
+      DVWA_PASSWORD: ${DVWA_PASSWORD:-password}
+      JUICE_EMAIL: ${JUICE_EMAIL:-}
+      JUICE_PASSWORD: ${JUICE_PASSWORD:-}
+      NUCLEI_TAGS: ${NUCLEI_TAGS:-spring,exposure,misconfiguration,default-login}
+      NUCLEI_SEVERITY: ${NUCLEI_SEVERITY:-high,critical}
+      NUCLEI_MAX_TARGETS: ${NUCLEI_MAX_TARGETS:-3}
+      OPENVAS_ENABLED: "false"
+      OPENVAS_HOST: openvas
+      OPENVAS_PORT: "9390"
+      OPENVAS_USERNAME: ${OPENVAS_USERNAME:-admin}
+      OPENVAS_PASSWORD: ${OPENVAS_PASSWORD:-admin}
+      OAST_URL: http://oast:8001
+      OAST_PUBLIC_BASE_URL: ${OAST_PUBLIC_BASE_URL:-http://oast:8001}
+      OAST_SECRET: ${OAST_SECRET:-local-oast-secret}
+      OAST_PORT: "8001"
+      WEAK_CREDENTIALS_FILE: /app/config/weak_credentials.txt
+      HOME: /tmp
+      XDG_CACHE_HOME: /tmp/.cache
+      TMPDIR: /tmp
+      PYTHONPATH: /app
+      VULN_ALIAS_FILE: /app/config/vuln_alias.json
+      PLAYBOOK_DIR: /app/report/playbooks
+      EVIDENCE_RETENTION_DAYS: ${EVIDENCE_RETENTION_DAYS:-30}
+      LAB_BENCHMARK_ENABLED: ${LAB_BENCHMARK_ENABLED:-true}
+      LLM_ENABLED: ${LLM_ENABLED:-false}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-deepseek-chat}
+      LLM_BATCH_SIZE: ${LLM_BATCH_SIZE:-6}
+      LLM_MAX_TOKENS: ${LLM_MAX_TOKENS:-4096}
+    volumes:
+      - ./samples:/app/samples:ro
+      - ./config:/app/config:ro
+      - ./report:/app/report:ro
+      - ./scripts:/app/scripts:ro
+      - output_data:/output
+    read_only: true
+    tmpfs:
+      - /tmp:size=1g
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      zap:
+        condition: service_healthy
+      oast:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  dvwa:
+    image: vulnerables/web-dvwa@sha256:dae203fe11646a86937bf04db0079adef295f426da68a92b40e3b181f337daa7
+    profiles: ["dvwa"]
+    ports:
+      - "${DVWA_PORT:-8081}:80"
+    restart: unless-stopped
+
+  mock:
+    build:
+      context: ./mock
+      dockerfile: Dockerfile
+    profiles: ["mock"]
+    ports:
+      - "${MOCK_HTTP_PORT:-18000}:8000"
+      - "${MOCK_K8S_PORT:-16443}:6443"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  tests:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    profiles: ["test"]
+    working_dir: /repo
+    environment:
+      DATABASE_URL: "sqlite+pysqlite:///:memory:"
+      AUTHORIZATION_FILE: /repo/samples/${AUTHORIZATION_FILE:-auth.example.yaml}
+      PYTHONPATH: /app
+    volumes:
+      - ./tests:/repo/tests:ro
+      - ./samples:/repo/samples:ro
+      - ./pytest.ini:/repo/pytest.ini:ro
+      - ./config:/repo/config:ro
+      - ./report:/repo/report:ro
+      - ./oast:/repo/oast:ro
+      - ./backend/worker:/app/worker:ro
+    command: ["python", "-m", "pytest", "-q", "-p", "no:cacheprovider"]
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  postgres_data:
+  redis_data:
+  output_data:
+  zap_data:
+  oast_data:
