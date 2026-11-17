@@ -151,7 +151,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run DVWA ablation experiments.")
     parser.add_argument("--api", default="http://127.0.0.1:8000")
     parser.add_argument("--username", default="admin")
-    parser.add_argument("--password", default="changeme")
+    parser.add_argument("--password", default="admin")
     parser.add_argument(
         "--ground-truth",
         default=str(ROOT / "evaluation" / "ground_truth_dvwa.yaml"),

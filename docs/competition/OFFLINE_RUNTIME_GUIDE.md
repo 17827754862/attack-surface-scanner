@@ -38,7 +38,9 @@ Worker 镜像已经包含：
 - ZAP Python 客户端
 - `gvm-cli`
 
-ZAP 是单独容器，OpenVAS 不在默认离线镜像中。
+ZAP 是单独容器。若生成离线包时启用 OpenVAS，则会额外包含
+`offline-bundle/openvas.tar`；加载脚本会自动载入该镜像，但默认 Compose
+不会启动 OpenVAS，需要完整评估时再使用 `docker-compose.full.yml`。
 
 ## 同学本地运行步骤
 
@@ -63,12 +65,16 @@ http://127.0.0.1:3000
 
 ## OpenVAS
 
-离线包默认不包含 OpenVAS。需要 OpenVAS 时：
+打包时可使用 `.\scripts\make_offline_bundle.ps1 -BundleDir offline-bundle -IncludeOpenVAS`
+一并保存 OpenVAS 镜像。需要 OpenVAS 时：
 
-- 使用单独批准的内网镜像；
+- 确认 `offline-bundle/openvas.tar` 已随包提供并成功加载；
 - 通过 `docker-compose.full.yml` 启动 `full` profile；
 - 首次启动仍需确认 feed 状态；
 - 不要把 OpenVAS 镜像塞进 GitHub 仓库。
+
+`load_offline_bundle.ps1` 会自动加载同目录下的 `openvas.tar`。如果目标机不需要
+主机漏洞扫描，可以删除该文件以节省 3 GiB 以上空间。
 
 ## 工具没有丢失
 

@@ -29,14 +29,27 @@ AUTHORIZATION_FILE=auth.local.yaml
 - `docs/time-budgets.md`
 - `docs/oast.md`
 
+## 比赛提交材料
+
+- 18 页技术文档：[PDF](docs/competition/传智杯-攻击面扫描系统-技术文档.pdf) / [Word](docs/competition/传智杯-攻击面扫描系统-技术文档.docx)
+- 5-8 分钟演示视频讲解稿与分镜：[DEMO_VIDEO_SCRIPT.md](docs/competition/DEMO_VIDEO_SCRIPT.md)
+- 大赛提交核对表：[COMPETITION_SUBMISSION_CHECKLIST.md](docs/competition/COMPETITION_SUBMISSION_CHECKLIST.md)
+- 离线运行资源说明：[OFFLINE_RUNTIME_GUIDE.md](docs/competition/OFFLINE_RUNTIME_GUIDE.md)
+- 给同学的 GitHub 上传步骤：[给同学的上传说明.md](给同学的上传说明.md)
+- 完整项目说明书：[docs/project-manual](docs/project-manual)
 
 ## 团队信息
 
 | 项目 | 信息 |
 |---|---|
 | 团队名称 | 我才是奶龙 |
-| 评审专用账号 | 由评审材料单独提供，不在公开仓库中留存 |
+| 学校 / 学院 | 待填写 |
+| 团队成员 | 待填写 |
+| 指导教师 | 待填写 |
+| 参赛组别 | 待填写 |
+| 评审专用账号 | 待填写（仅在线演示需要） |
 
+提交前请将“待填写”替换为真实信息，并确认公开仓库中不包含 `.env`、API Key、账号密码或授权单位敏感信息。
 
 ## 技术架构
 
@@ -97,7 +110,7 @@ Linux / macOS：
 http://127.0.0.1:3000
 ```
 
-登录账号来自 `.env` 的 `ADMIN_USERNAME` 和 `ADMIN_PASSWORD`。如果未修改，默认是 `admin` / `changeme`。
+登录账号来自 `.env` 的 `ADMIN_USERNAME` 和 `ADMIN_PASSWORD`。默认是 `admin` / `admin`。
 登录后默认进入安全态势总览；点击侧栏“新建扫描”进入任务配置。
 
 ### 可选 VAS 启动器
@@ -282,14 +295,17 @@ Windows PowerShell 可直接使用等价脚本：
 ```
 
 离线包包含前后端、Worker、ZAP、PostgreSQL、Redis、DVWA 和 Mock 镜像，并生成
-`SHA256SUMS` 与 `VERSION`。OpenVAS 体积大且需要同步漏洞库，默认不进入离线包。
+`SHA256SUMS` 与 `VERSION`。需要把 OpenVAS 一并带走时，在 Windows 上使用
+`.\scripts\make_offline_bundle.ps1 -BundleDir offline-bundle -IncludeOpenVAS`。
+OpenVAS 体积较大且首次启动需要同步漏洞库，但加载脚本会自动载入同目录的
+`openvas.tar`，默认 Compose 不会主动启动它。
 
 ## JWT 与能力接口
 
 登录取 token：
 
 ```powershell
-$body = @{ username = "admin"; password = "changeme" } | ConvertTo-Json
+$body = @{ username = "admin"; password = "admin" } | ConvertTo-Json
 $login = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/auth/login -ContentType application/json -Body $body
 $headers = @{ Authorization = "Bearer $($login.access_token)" }
 ```
@@ -416,11 +432,3 @@ tests/                   门禁、模型和解析器测试
   `SECURITY_BOUNDARIES.md`。
 - 本机没有可用 DeepSeek Key，因此已完成 API 配置、加密、错误降级和 mock 调用测试，
   但没有声称完成真实 DeepSeek 生成质量验收。
-
-## 许可证
-
-本项目采用 [MIT 许可证](LICENSE)。第三方组件与工具的许可证见
-[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
-
-使用本工具前请确认你对目标拥有明确授权。许可证授予的是代码的使用权，
-不构成对任何目标进行扫描的授权。

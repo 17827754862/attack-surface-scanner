@@ -108,15 +108,7 @@ class ZapAdapter(BaseAdapter):
                     context_name,
                     rf"https?://{host}(:\d+)?(/.*)?",
                 )
-                excluded_paths = list(
-                    dict.fromkeys(
-                        [
-                            *(options.get("safe_path_denylist") or []),
-                            *(options.get("active_scan_exclude") or []),
-                        ]
-                    )
-                )
-                for excluded_path in excluded_paths:
+                for excluded_path in options.get("safe_path_denylist", []):
                     try:
                         client.context.exclude_from_context(
                             context_name,
@@ -174,6 +166,16 @@ class ZapAdapter(BaseAdapter):
                     metrics["session_source"] = (
                         "replacer" if cookie_rule else "none"
                     )
+                for excluded_path in options.get("active_scan_exclude", []):
+                    try:
+                        client.context.exclude_from_context(
+                            context_name,
+                            rf"https?://{re.escape(host)}(:\d+)?/"
+                            rf"{re.escape(str(excluded_path).lstrip('/'))}"
+                            r"(?:\?.*)?$",
+                        )
+                    except Exception:
+                        pass
                 if user_id:
                     ascan_id = client.ascan.scan_as_user(
                         url=target,
@@ -220,10 +222,7 @@ class ZapAdapter(BaseAdapter):
             client.ajaxSpider.set_option_number_of_browsers(1)
         except Exception:
             pass
-        try:
-            client.ajaxSpider.scan(target, inscope="true")
-        except TypeError:
-            client.ajaxSpider.scan(target)
+        client.ajaxSpider.scan(target)
         self._wait(
             lambda: (
                 100

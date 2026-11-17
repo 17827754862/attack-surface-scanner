@@ -1,5 +1,8 @@
 .env
 samples/auth.local.yaml
+.project-documentation/
+offline-bundle/
+packages/
 data/
 reports/
 output/

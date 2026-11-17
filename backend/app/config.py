@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 720
     admin_username: str = "admin"
-    admin_password: str = "changeme"
+    admin_password: str = "admin"
     authorization_file: str = "samples/auth.example.yaml"
     default_scope: str = "dvwa,127.0.0.1,localhost"
     max_rps: int = 5
@@ -30,9 +30,6 @@ class Settings(BaseSettings):
     openvas_port: int = 9390
     openvas_username: str = "admin"
     openvas_password: str = "admin"
-    safe_scan_denylist: str = (
-        "logout.php,logout,signout,setup.php,install.php,reset.php,delete.php"
-    )
     validation_max_pages: int = 25
     validation_max_parameters: int = 80
     validation_max_requests: int = 400

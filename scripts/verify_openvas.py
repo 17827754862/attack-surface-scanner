@@ -11,7 +11,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Validate OpenVAS integration or report degradation.")
     parser.add_argument("--api", default="http://127.0.0.1:8000")
     parser.add_argument("--username", default="admin")
-    parser.add_argument("--password", default="changeme")
+    parser.add_argument("--password", default="admin")
     args = parser.parse_args()
     login = httpx.post(
         f"{args.api}/api/auth/login",

@@ -30,6 +30,14 @@ try {
         throw "docker load failed"
     }
 
+    $openvasTar = Join-Path $bundlePath "openvas.tar"
+    if (Test-Path -LiteralPath $openvasTar) {
+        & docker load -i $openvasTar
+        if ($LASTEXITCODE -ne 0) {
+            throw "docker load failed for OpenVAS"
+        }
+    }
+
     if (-not (Test-Path -LiteralPath (Join-Path $projectRoot ".env"))) {
         Copy-Item -LiteralPath (Join-Path $projectRoot ".env.example") -Destination (Join-Path $projectRoot ".env")
         Write-Output "Created .env from .env.example; change every default secret before sharing."

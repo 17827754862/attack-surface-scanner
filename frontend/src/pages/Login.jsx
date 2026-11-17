@@ -14,7 +14,7 @@ import { api, setToken } from "../api";
 
 export default function Login() {
   const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("changeme");
+  const [password, setPassword] = useState("admin");
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");

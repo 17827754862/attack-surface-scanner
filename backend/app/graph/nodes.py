@@ -257,12 +257,6 @@ def _scope_options(state: PentestState) -> dict[str, Any]:
         auth_scan = False
         safe_path_denylist = []
         active_scan_exclude = []
-    defaults = [
-        item.strip()
-        for item in str(getattr(settings, "safe_scan_denylist", "")).split(",")
-        if item.strip()
-    ]
-    safe_path_denylist = list(dict.fromkeys([*defaults, *(safe_path_denylist or [])]))
     return {
         "max_rps": state.get("max_rps", 5),
         "mode": state.get("mode", "active"),

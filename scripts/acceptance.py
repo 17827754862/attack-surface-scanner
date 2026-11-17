@@ -216,7 +216,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--api", default="http://127.0.0.1:8000")
     parser.add_argument("--username", default="admin")
-    parser.add_argument("--password", default="changeme")
+    parser.add_argument("--password", default="admin")
     parser.add_argument("--output", default="acceptance-results")
     args = parser.parse_args()
     output = Path(args.output)

@@ -23,6 +23,9 @@ esac
   sha256sum -c SHA256SUMS
 )
 docker load -i "$BUNDLE_DIR/images.tar"
+if [ -f "$BUNDLE_DIR/openvas.tar" ]; then
+  docker load -i "$BUNDLE_DIR/openvas.tar"
+fi
 
 if [ ! -f .env ]; then
   cp .env.example .env
