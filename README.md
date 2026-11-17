@@ -29,27 +29,14 @@ AUTHORIZATION_FILE=auth.local.yaml
 - `docs/time-budgets.md`
 - `docs/oast.md`
 
-## 比赛提交材料
-
-- 18 页技术文档：[PDF](docs/competition/传智杯-攻击面扫描系统-技术文档.pdf) / [Word](docs/competition/传智杯-攻击面扫描系统-技术文档.docx)
-- 5-8 分钟演示视频讲解稿与分镜：[DEMO_VIDEO_SCRIPT.md](docs/competition/DEMO_VIDEO_SCRIPT.md)
-- 大赛提交核对表：[COMPETITION_SUBMISSION_CHECKLIST.md](docs/competition/COMPETITION_SUBMISSION_CHECKLIST.md)
-- 离线运行资源说明：[OFFLINE_RUNTIME_GUIDE.md](docs/competition/OFFLINE_RUNTIME_GUIDE.md)
-- 给同学的 GitHub 上传步骤：[给同学的上传说明.md](给同学的上传说明.md)
-- 完整项目说明书：[docs/project-manual](docs/project-manual)
 
 ## 团队信息
 
 | 项目 | 信息 |
 |---|---|
-| 团队名称 | 待填写 |
-| 学校 / 学院 | 待填写 |
-| 团队成员 | 待填写 |
-| 指导教师 | 待填写 |
-| 参赛组别 | 待填写 |
-| 评审专用账号 | 待填写（仅在线演示需要） |
+| 团队名称 | 我才是奶龙 |
+| 评审专用账号 | 由评审材料单独提供，不在公开仓库中留存 |
 
-提交前请将“待填写”替换为真实信息，并确认公开仓库中不包含 `.env`、API Key、账号密码或授权单位敏感信息。
 
 ## 技术架构
 
